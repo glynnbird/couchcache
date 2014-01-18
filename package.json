@@ -1,5 +1,5 @@
 {
-  "name": "CouchCache",
+  "name": "couchcache",
   "version": "0.0.1",
   "description": "Node.js library for a CouchDB cache service",
   "main": "couchcache.js",
