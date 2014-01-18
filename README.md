@@ -121,7 +121,7 @@ In test/benchmark.js, there is a script which calculates the average time to fet
 
 1) From my machine to hosted CouchDB (Cloudant) over the internet - 158ms
 2) From my machine to local CouchDB - 24ms
-3) From a server to dedicated CouchDB (Cloudant) in same data centre - 
+3) From a server to dedicated CouchDB (Cloudant) in same data centre - 55ms
 
 
 

@@ -24,7 +24,7 @@ var init = function(url, options, callback) {
     callback = options;
     options = defaultOptions;
   } else {
-    Object.keys.map(function(key) {
+    Object.keys(options).map(function(key) {
       if (_.isUndefined(options[key])) {
         options[key] = defaultOptions[key];
       }

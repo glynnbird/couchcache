@@ -11,7 +11,7 @@ if (typeof process.env.COUCH_URL == "undefined") {
 async.series([
   
   function(callback) {
-    couchcache.init(process.env.COUCH_URL, function(err, data) {
+    couchcache.init(process.env.COUCH_URL, { turbo: true },  function(err, data) {
       callback(null,null);
     });
   },
