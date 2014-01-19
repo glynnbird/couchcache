@@ -3,6 +3,7 @@ var nano = null,
     cacheDB = null,
     opts = null,
     async = require('async'),
+    zlib = require('zlib'),
     _ = require('underscore'),
     moment = require('moment');
 
@@ -115,6 +116,16 @@ var set = function(key, value, callback) {
   cacheDB.insert(doc, callback);
 };
 
+// set a compressed cache key/vaue
+var zset = function(key, value, callback) {
+  if (!_.isString(value)) {
+    return callback(true, "Strings only");
+  }
+  zlib.gzip(value, function(err, buffer) {
+    set( key, buffer.toString('base64'), callback);
+  }); 
+};
+
 // get a cache key
 var get = function(key, callback) {
   var options =  { 
@@ -136,6 +147,20 @@ var get = function(key, callback) {
     } else {
       callback(null, null);
     }
+  });
+};
+
+// fetch a zipped key
+var zget = function(key, callback) {
+  get(key, function(err, data) {
+    var b = new Buffer(data, "base64");
+	  zlib.gunzip(b, function(err, buffer) {
+	    if (!err) {
+	      callback(null,buffer.toString());
+	    } else {
+	      callback(null, null);
+	    }
+	  });
   });
 };
 
@@ -216,5 +241,7 @@ module.exports = {
   init: init,
   get: get,
   set: set,
-  del: del
+  del: del,
+  zset: zset,
+  zget: zget
 };

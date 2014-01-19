@@ -10,9 +10,9 @@
 
 ## Introduction
                                                           
-If you want to produce a resilient Memcache cluster, it's harder than you think. If you happen to have a resilient CouchDB cluster to hand, such as the hosted CouchDB service provided by [Cloudant](https://cloudant.com/), you could use CouchDB as your cache without having to create and maintain another cluster of servers.
+If you want to produce a resilient Memcache cluster, it's harder than you think. If you happen to have a resilient CouchDB cluster to hand, such as the hosted CouchDB service provided by [Cloudant](https://cloudant.com/), you could use CouchDB as your cache without having to create and maintain another resilient cluster of servers.
 
-This project is software library for Node.js that provides Memcache-like functionality but uses CouchDB as the storage mechanism. This is slower than Memcache, but is persistant. 
+This project is software library for Node.js that provides Memcache-like functionality but uses CouchDB as the storage mechanism. This is slower than Memcache, but is persistant and has a larger storage capacity. 
 
 ## Installation
 
@@ -115,6 +115,17 @@ couchcache.init("https://username:password@username.cloudant.com:443", options, 
 
 The options listed above are the default values. The "turbo" option uses "stale=ok" when fetching cache keys. This yields a performance improvement, at the expense of the possibility of fetching an older version of the cache value. 
 
+## zset and zget
+
+Helper functions are provider to get and set cache values, compressing them on the way. Only strings are supported:
+
+```
+  var bigObject = { .... };
+  couchcache.zset("mykey", JSON.stringify(bigObject), function(err, data) {
+    console.log("saved");
+  });
+```
+
 ## Benchmarking
 
 In test/benchmark.js, there is a script which calculates the average time to fetch a cache key. Here is how the results stack up:
@@ -122,6 +133,35 @@ In test/benchmark.js, there is a script which calculates the average time to fet
 1) From my machine to hosted CouchDB (Cloudant) over the internet - 158ms
 2) From my machine to local CouchDB - 24ms
 3) From a server to dedicated CouchDB (Cloudant) in same data centre - 55ms
+
+## Should I use CouchCache?
+
+If you are not careful, then your cache can easily become a single point of failure in an IT system. The following sections discuss various solutions for a non-trivial installation e.g. several servers sharing the same cache. 
+
+### LocalMemcache
+
+You can install Memcache on each server (the fastest option), but then you have different servers
+with different cache keys. If you want to invalidate a cache key, it must be done on multiple servers.
+
+### Single shared Memcache server
+
+All servers point to a single Memcache instance. This becomes your single point of failure and the size of the cache is limited by the cache machine's memory.
+
+### Multi-server Memcache cluster
+
+Several servers, with the keys distributed using consistent hashing. This spreads the risk of a failure and increases the cache capacity, but each shard of the cache is it's own SPOF.
+
+### Load-balancer in front of serveral Memcache servers
+
+The most reliable solution, but has the odd effect that a cache key saved may not be fetchable if you end up reading from a different server from the one you saved it to.
+
+### Hosted Cache
+
+Third-party suppliers (such as IronCache) can provide a caching API, but unless you happen to be in their data centre (Amazon US East), then performance is poor.
+
+### CouchCache
+
+If you need persistant local Cache, then CouchCache is a good fit. If you happen to have a BigCouch installation in your data centre (e.g. hosted and managed by Cloudant), then CouchCache allows you to have a bigger and persistant cache with reasonable performance (55ms per fetch).
 
 
 

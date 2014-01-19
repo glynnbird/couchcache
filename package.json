@@ -1,6 +1,6 @@
 {
   "name": "couchcache",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Node.js library for a CouchDB cache service",
   "main": "couchcache.js",
   "dependencies": {

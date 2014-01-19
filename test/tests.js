@@ -8,7 +8,8 @@ var couchcache = require('../couchcache.js'),
   }
   
   var demoObject = { a: 1, b:"woof", c:[1,2,34], d: { A: 1, B:2}, e: true};
-
+  var demoString  = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+  
   describe('couchcache', function(){ 
 
     describe('get_and_set', function() {
@@ -208,6 +209,40 @@ var couchcache = require('../couchcache.js'),
           assert.equal(err, null);
           data.should.be.an.Array;
           data.length.should.equal(2);
+          done();
+        });  
+      });
+      
+      it('should allow a compressed value to be written', function(done) {
+        
+        couchcache.zset("zkey", demoString, function(err, data) {
+          assert.equal(err, null);
+          data.should.be.an.Object;
+          data.should.have.property.ok;
+          data.ok.should.be.a.Boolean;
+          data.ok.should.be.equal(true);
+          data.should.have.property.id;
+          data.id.should.be.a.String;
+          data.should.have.property.rev;
+          data.rev.should.be.a.String;
+          done();
+        });  
+      });
+      
+      it('should allow a compressed value be retrieved', function(done) {
+        
+        couchcache.zget("zkey", function(err, data) {
+          assert.equal(err, null);
+          data.should.be.an.String;
+          data.should.be.equal(demoString);
+          done();
+        });  
+      });
+      
+      it('should not allow a non-string written by zset', function(done) {
+        
+        couchcache.zset("zkey", demoObject, function(err, data) {
+          assert.equal(err, true);
           done();
         });  
       });
