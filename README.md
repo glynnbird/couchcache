@@ -27,7 +27,7 @@ You need to initialise CouchCache with the url of the your CouchDb instance:
 ```
   var couchcache = required("couchcache");
   couchcache.init("https://username:password@username.cloudant.com:443", function(err, data) {
-    console.log("CouchCache nitialised");
+    console.log("CouchCache initialised");
   });                                                  
 ```
 
@@ -35,7 +35,7 @@ Then you can write items:
 
 ```
   couchcache.set("mykey", "myvalue", function(err, data) {
-    console.log("CouchCache nitialised");
+    console.log("CouchCache initialised");
   });
 ```
 
@@ -68,7 +68,7 @@ Then you can write items:
 
 ```
   couchcache.set("mykey", { a: "myvalue", b: [1,2,3], c: true }, function(err, data) {
-    console.log("CouchCache nitialised");
+    console.log("CouchCache initialised");
   });
 ```
 
@@ -109,7 +109,7 @@ var options = {
 };
 var couchcache = required("couchcache");
 couchcache.init("https://username:password@username.cloudant.com:443", options, function(err, data) {
-  console.log("CouchCache nitialised");
+  console.log("CouchCache initialised");
 });  
 ```
 
