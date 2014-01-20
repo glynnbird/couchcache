@@ -130,16 +130,17 @@ Helper functions are provider to get and set cache values, compressing them on t
 
 In test/benchmark.js, there is a script which calculates the average time to fetch a cache key. Here is how the results stack up:
 
-1) From my machine to hosted BigCouch CouchDB (Cloudant) over the internet - 100ms
-2) From my machine to local CouchDB - 8ms
-3) From a server reading from a dedicated BigCouch CouchDB (Cloudant) cluster in the same data centre - 19ms
+1. From my machine to hosted BigCouch CouchDB (Cloudant) over the internet - 100ms
+2. From my machine to local CouchDB - 8ms
+3. From a server reading from a dedicated BigCouch CouchDB (Cloudant) cluster in the same data centre - 19ms
 
 This should be compared to Memcached which has the following benchmarks:
-1) My machine to hosted Memcached over the internet - 20ms
-2) My machine to local Memcached - 0.25ms
-3) A server reading from a 2 Memcached server cluster in the same data centre - 1.5ms 
 
-So, not suprisingly, local Memcache is the fastest, but is not persistent. The closer you are to your cache, the faster it is. Whether you 20ms is fast enough for your application depends on your application.
+1. My machine to hosted Memcached over the internet - 20ms
+2. My machine to local Memcached - 0.25ms
+3. A server reading from a 2 Memcached server cluster in the same data centre - 1.5ms 
+
+So, not suprisingly, local Memcache is the fastest, but it is not persistent. The closer you are to your cache, the faster it is. Whether 20ms is fast enough for your application depends on your application!
  
 ## Should I use CouchCache?
 
