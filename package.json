@@ -4,7 +4,6 @@
   "description": "Node.js library for a CouchDB cache service",
   "main": "couchcache.js",
   "dependencies": {
-    "request": "2.31.0",
     "underscore": "1.5.2",
     "nano": "4.3.0",
     "async": "0.2.9",
