@@ -130,10 +130,17 @@ Helper functions are provider to get and set cache values, compressing them on t
 
 In test/benchmark.js, there is a script which calculates the average time to fetch a cache key. Here is how the results stack up:
 
-1) From my machine to hosted CouchDB (Cloudant) over the internet - 158ms
-2) From my machine to local CouchDB - 24ms
-3) From a server to dedicated CouchDB (Cloudant) in same data centre - 55ms
+1) From my machine to hosted BigCouch CouchDB (Cloudant) over the internet - 100ms
+2) From my machine to local CouchDB - 8ms
+3) From a server reading from a dedicated BigCouch CouchDB (Cloudant) cluster in the same data centre - 19ms
 
+This should be compared to Memcached which has the following benchmarks:
+1) My machine to hosted Memcached over the internet - 20ms
+2) My machine to local Memcached - 0.25ms
+3) A server reading from a 2 Memcached server cluster in the same data centre - 1.5ms 
+
+So, not suprisingly, local Memcache is the fastest, but is not persistent. The closer you are to your cache, the faster it is. Whether you 20ms is fast enough for your application depends on your application.
+ 
 ## Should I use CouchCache?
 
 If you are not careful, then your cache can easily become a single point of failure in an IT system. The following sections discuss various solutions for a non-trivial installation e.g. several servers sharing the same cache. 
@@ -161,7 +168,9 @@ Third-party suppliers (such as IronCache) can provide a caching API, but unless 
 
 ### CouchCache
 
-If you need persistant local Cache, then CouchCache is a good fit. If you happen to have a BigCouch installation in your data centre (e.g. hosted and managed by Cloudant), then CouchCache allows you to have a bigger and persistant cache with reasonable performance (55ms per fetch).
+If you need persistant local Cache, then CouchCache could be a good fit. If you happen to have a BigCouch installation in your data centre (e.g. hosted and managed by Cloudant), then CouchCache allows you to have a bigger and persistant cache with reasonable performance (20ms per fetch).
+
+
 
 
 

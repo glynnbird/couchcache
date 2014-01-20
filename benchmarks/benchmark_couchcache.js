@@ -37,7 +37,7 @@ async.series([
   function(callback) {
     
     var tasks = [];
-    for(var i = 0; i < 100; i++) {
+    for(var i = 0; i < 500; i++) {
       (function(k){
         tasks.push(function(callback) {
           var start = moment().valueOf();
@@ -47,7 +47,7 @@ async.series([
         });
       })(i % 100);
     }
-    async.parallelLimit(tasks, 5, function(err, data) {
+    async.series(tasks, function(err, data) {
       console.log("keys fetched", data);
       var tot = 0.0;
       for(var i in data) {
