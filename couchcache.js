@@ -132,8 +132,7 @@ var get = function(key, callback) {
                     startkey: [ key, 'z'], 
                     endkey:[key, moment().valueOf()], 
                     limit: 1, 
-                    descending: true, 
-                    include_docs:true
+                    descending: true
                  };
   if (opts.turbo) {
     options.stale = "ok";
@@ -142,8 +141,8 @@ var get = function(key, callback) {
     if (err) {
       return callback(err, data);
     }
-    if (!_.isUndefined(data.rows) && data.rows.length==1 && _.isObject(data.rows[0].doc)) {
-      callback(null, data.rows[0].doc.value);
+    if (!_.isUndefined(data.rows) && data.rows.length==1 && _.isObject(data.rows[0])) {
+      callback(null, data.rows[0].value);
     } else {
       callback(null, null);
     }
@@ -245,3 +244,6 @@ module.exports = {
   zset: zset,
   zget: zget
 };
+
+
+

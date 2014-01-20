@@ -131,7 +131,7 @@ Helper functions are provider to get and set cache values, compressing them on t
 In test/benchmark.js, there is a script which calculates the average time to fetch a cache key. Here is how the results stack up:
 
 1. From my machine to hosted BigCouch CouchDB (Cloudant) over the internet - 100ms
-2. From my machine to local CouchDB - 8ms
+2. From my machine to local CouchDB - 7ms
 3. From a server reading from a dedicated BigCouch CouchDB (Cloudant) cluster in the same data centre - 19ms
 
 This should be compared to Memcached which has the following benchmarks:
