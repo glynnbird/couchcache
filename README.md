@@ -93,6 +93,7 @@ When we retrieve a cacheKey, we use a CouchDB view that fetches the document tha
 
 On startup, a new CouchDB database is created and the CouchCache design document is installed which 
 creates two views:
+
 * _design/fetch/by_key - used to fetch individual cache keys
 * _desing/fetch/by_ts - used to purge old cache documents 
 
@@ -132,7 +133,7 @@ In test/benchmark.js, there is a script which calculates the average time to fet
 
 1. From my machine to hosted BigCouch CouchDB (Cloudant) over the internet - 100ms
 2. From my machine to local CouchDB - 7ms
-3. From a server reading from a dedicated BigCouch CouchDB (Cloudant) cluster in the same data centre - 19ms
+3. From a server reading from a dedicated BigCouch CouchDB (Cloudant) cluster in the same data centre - 18ms
 
 This should be compared to Memcached which has the following benchmarks:
 
