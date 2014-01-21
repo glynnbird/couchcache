@@ -1,9 +1,17 @@
 {
   "name": "couchcache",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Node.js library for a CouchDB cache service",
   "main": "couchcache.js",
   "repository": "https://github.com/touchlocal/couchcache",
+  "keywords": [
+    "CouchDB",
+    "cache",
+    "memcache",
+    "couch"
+  ],
+  "author": "Glynn Bird",
+  "license": "BSD",
   "dependencies": {
     "underscore": "1.5.2",
     "nano": "4.3.0",
