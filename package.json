@@ -1,8 +1,9 @@
 {
   "name": "couchcache",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Node.js library for a CouchDB cache service",
   "main": "couchcache.js",
+  "repository": "https://github.com/touchlocal/couchcache",
   "dependencies": {
     "underscore": "1.5.2",
     "nano": "4.3.0",
