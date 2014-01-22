@@ -25,16 +25,18 @@ var init = function(url, options, callback) {
     callback = options;
     options = defaultOptions;
   } else {
-    Object.keys(options).map(function(key) {
-      if (_.isUndefined(options[key])) {
-        options[key] = defaultOptions[key];
-      }
+    Object.keys(defaultOptions).map(function(key) {
+      options[key] = _.isUndefined(options[key]) ? defaultOptions[key] : options[key];
     });
   }
   opts = options;
   
   // create the database
-  nano.db.create(opts.dbname, function (err, body) {
+  var putoptions = { db: opts.dbname,
+                  method: "put",
+                  body: { q: 1 }         // the number shards to create - BigCouch only
+                };
+  nano.request(putoptions, function (err, body) {
     cacheDB = nano.db.use(opts.dbname);
     createViews(callback);
   });
@@ -132,7 +134,8 @@ var get = function(key, callback) {
                     startkey: [ key, 'z'], 
                     endkey:[key, moment().valueOf()], 
                     limit: 1, 
-                    descending: true
+                    descending: true,
+                    r: 1   // read quorum - no need to fetch data from other shards as there is only one revision per doc
                  };
   if (opts.turbo) {
     options.stale = "ok";
