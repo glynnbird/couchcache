@@ -32,11 +32,7 @@ var init = function(url, options, callback) {
   opts = options;
   
   // create the database
-  var putoptions = { db: opts.dbname,
-                  method: "put",
-                  body: { q: 1 }         // the number shards to create - BigCouch only
-                };
-  nano.request(putoptions, function (err, body) {
+  nano.db.create(opts.dbname, function (err, body) {
     cacheDB = nano.db.use(opts.dbname);
     createViews(callback);
   });
