@@ -247,6 +247,15 @@ var couchcache = require('../couchcache.js'),
         });  
       });
       
+      it('should allow a non-existant compressed value be retrieved', function(done) {
+        
+        couchcache.zget("zkeyimaginery", function(err, data) {
+          assert.equal(err, null);
+          assert.equal(data, null);
+          done();
+        });  
+      });
+      
       
     });
   });

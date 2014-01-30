@@ -151,14 +151,19 @@ var get = function(key, callback) {
 // fetch a zipped key
 var zget = function(key, callback) {
   get(key, function(err, data) {
-    var b = new Buffer(data, "base64");
-	  zlib.gunzip(b, function(err, buffer) {
-	    if (!err) {
-	      callback(null,buffer.toString());
-	    } else {
-	      callback(null, null);
-	    }
-	  });
+    if (!err && _.isString(data)) {
+      var b = new Buffer(data, "base64");
+  	  zlib.gunzip(b, function(err, buffer) {
+  	    if (!err) {
+  	      callback(null,buffer.toString());
+  	    } else {
+  	      callback(null, null);
+  	    }
+  	  });
+    } else {
+      callback(null, null);
+    }
+
   });
 };
 

@@ -25,7 +25,7 @@ This project is software library for Node.js that provides Memcache-like functio
 You need to initialise CouchCache with the url of the your CouchDb instance:
 
 ```
-  var couchcache = required("couchcache");
+  var couchcache = require("couchcache");
   couchcache.init("https://username:password@username.cloudant.com:443", function(err, data) {
     console.log("CouchCache initialised");
   });                                                  
