@@ -246,7 +246,8 @@ module.exports = {
   set: set,
   del: del,
   zset: zset,
-  zget: zget
+  zget: zget,
+  purge: purge
 };
 
 
