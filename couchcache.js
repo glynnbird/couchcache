@@ -201,6 +201,7 @@ var purge = function(callback) {
        cacheDB.view('fetch', 'by_ts', options, function(err,data) {
        
          if(err || data.rows.length==0) {
+           finished=true;
            return callback(null);
          }
 
