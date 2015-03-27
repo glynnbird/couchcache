@@ -35,7 +35,7 @@ Then you can write items:
 
 ```
   couchcache.set("mykey", "myvalue", function(err, data) {
-    console.log("CouchCache initialised");
+    console.log("CouchCache set");
   });
 ```
 
@@ -55,20 +55,12 @@ and delete them:
   });
 ```
 
-Occasionaly, you can ask CouchCache to purge old keys:
-
-```
-  couchcache.purge(function(err, data) {
-    console.log("CouchCache purged");
-  });
-```
 
 You can write arbitrary JSON objects:
-Then you can write items:
 
 ```
   couchcache.set("mykey", { a: "myvalue", b: [1,2,3], c: true }, function(err, data) {
-    console.log("CouchCache initialised");
+    console.log("CouchCache written");
   });
 ```
 
@@ -92,10 +84,10 @@ able to overwrite keys simply by adding another document with the same *cacheKey
 When we retrieve a cacheKey, we use a CouchDB view that fetches the document that matches the supplied cacheKey and has the newest timestamp.
 
 On startup, a new CouchDB database is created and the CouchCache design document is installed which 
-creates two views:
+creates one view:
 
 * _design/fetch/by_key - used to fetch individual cache keys
-* _desing/fetch/by_ts - used to purge old cache documents 
+
 
 ## Other options
 
@@ -105,7 +97,6 @@ When initialising CouchCache, you can supply an optional "options" object which 
 var options = {
   expires: 60*60*24*1000,    // expire cacheKeys one day from now (in milliseconds) 
   turbo: false,              // whether to enable turbo mode
-  autopurge: true,           // whether to purge old cacheKeys from the databse every hour
   dbname: "cache"            // the name of the CouchDB database to use
 };
 var couchcache = required("couchcache");
@@ -124,6 +115,18 @@ Helper functions are provider to get and set cache values, compressing them on t
   var bigObject = { .... };
   couchcache.zset("mykey", JSON.stringify(bigObject), function(err, data) {
     console.log("saved");
+  });
+```
+
+
+## Recovering storage space
+
+CouchCache is designed around a "write-only" model - the database only gets larger. CouchDB doesn't have a mechanism of recovering the disk space of deleted documents, so the only realistic solution is to occasionaly delete and recrete the CouchCache database.
+This service can be performed for you by calling a helper function `reset`:
+
+```
+  couchcache.reset(function(err, data) {
+    console.log("CouchCache reset");
   });
 ```
 

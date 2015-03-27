@@ -11,14 +11,18 @@ var nano = null,
 var defaultOptions = {
   expires: 60*60*24*1000,
   turbo: false,
-  autopurge: true,
   dbname: "cache"
 };
+
+var theOptions = null;
+var theUrl = null;
 
 // initialise the CouchCache library - make DB connection, deal with options
 var init = function(url, options, callback) {
   // initialise couchdb library
   nano = require('nano')(url);
+  theOptions = options;
+  theUrl = url;
   
   // apply default options, if not supplied
   if (_.isUndefined(callback)) {
@@ -36,13 +40,7 @@ var init = function(url, options, callback) {
     cacheDB = nano.db.use(opts.dbname);
     createViews(callback);
   });
-  
-  // if we are to autopurge, run purge every hour
-  if (opts.autopurge) {
-    setInterval(function() {
-      purge(function(err, data) { });
-    }, 1000*60*60);
-  }
+
 };
 
 // check to see if view "id" has contains "content"; if not replace it
@@ -173,72 +171,11 @@ var del = function(key, callback) {
   set(key, null, callback);
 };
 
-// remove old cache keys - ones whose expires field < now
-var purge = function(callback) {
-  var batch_size=100;
-  var startkey_docid = null;
-  var finished = false;
-  var total = 0;
-
-  async.doUntil(
-    // do this
-    function(callback) {
-      // fetch results from view by_month - query() is not defined in this gist
-       // startkey_docid allows us to page efficiently
-       // stale=ok because we won't be querying new data
-       // batch_size + 1 because we need to fetch the first docid of the next page in the result set
-       // starkey = beginning of time  ----> endkey = now
-       var options = {
-         limit: batch_size+1,
-         startkey: 0,
-         endkey: moment().valueOf(),
-         stale: "ok"
-       };
-       if(startkey_docid) {
-         options.startkey_docid = startkey_docid;
-       }
-
-       cacheDB.view('fetch', 'by_ts', options, function(err,data) {
-       
-         if(err || data.rows.length==0) {
-           finished=true;
-           return callback(null);
-         }
-
-         // iterate through all docs except the last one (which will be the start of the next batch)
-         var docs = [ ];
-         for(var i in data.rows) {
-           if (typeof data.rows[i].value != 'undefined') {
-             docs.push( { _id: data.rows[i].id,
-                          _rev: data.rows[i].value,
-                          _deleted: true
-                         } );
-             total++;               
-           }
-         }
-
-         // store the start of the next page
-         if(data.rows.length <= batch_size) {
-           finished = true;
-         } else {
-           startkey_docid = data.rows[data.rows.length - 1]["id"];
-         }
-
-         cacheDB.bulk({docs: docs}, function(err, data) {
-           callback();
-         });
-
-       });
-    },
-    // until test
-    function() {
-      return finished;
-    },
-    // called on completion
-    function (err) {
-      return callback(err, total);
-    }
-  ); 
+// delete and recreate the couchcache database
+var reset = function(callback) {
+  nano.db.destroy(opts.dbname, function(err,data) {
+    init(theUrl, theOptions, callback);
+  });
 };
 
 module.exports = {
@@ -247,8 +184,7 @@ module.exports = {
   set: set,
   del: del,
   zset: zset,
-  zget: zget,
-  purge: purge
+  zget: zget
 };
 
 
